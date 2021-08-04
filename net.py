@@ -4,18 +4,18 @@
 import torch
 from torch import nn
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-print("Using " + device)
-
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
         self.stack = nn.Sequential(
-            # vel, dir, 5 rays
-            nn.Linear(9, 32),
+            # vel, lookdir, 5 rays
+            nn.Linear(9, 64),
             nn.ReLU(),
-            nn.Linear(32, 2),
-            nn.ReLU()
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            nn.Linear(64, 2),
+            nn.Tanh()
+            # outputs forward accel and turn amount in range (-1, 1)
         )
 
     def forward(self, x):

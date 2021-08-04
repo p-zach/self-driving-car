@@ -17,12 +17,12 @@ class Car(pygame.sprite.Sprite):
         self.max_rot_speed = .08
         self.friction = .99
         
-        self.reset(pos)
+        self.reset(np.array(pos))
 
     def reset(self, pos):
         self.rotation = 0
         self.turn(0)
-        self.position = pos
+        self.position = np.array(pos, np.float64)
         self.velocity = np.array([0, 0])
 
     def clamp_vec(self, vector, max_mag):
@@ -32,10 +32,12 @@ class Car(pygame.sprite.Sprite):
         else: return vector / mag * max_mag
 
     def accel(self, amount: float):
+        amount += 0.5
+
         amount *= self.accel_rate
         self.velocity = self.clamp_vec(self.velocity + np.array([amount * math.cos(self.rotation), amount * -math.sin(self.rotation)]), self.max_speed)
-        self.position = (self.position[0] + self.velocity[0], self.position[1] + self.velocity[1])
-        self.rect.center = self.position
+        self.position += self.velocity
+        self.rect.center = tuple(self.position)
 
     def turn(self, angle: float):
         self.rotation += angle * self.max_rot_speed

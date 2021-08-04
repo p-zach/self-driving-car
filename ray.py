@@ -16,11 +16,11 @@ def cast(origin: np.ndarray, dir: np.ndarray, map: np.ndarray, want_endpoint = F
         float: The distance from the origin to the first hit wall.
         --- OR ---
         tuple: (float) The distance from the origin to the first hit wall;
-            (numpy.ndarray) The position of the ray intersection point.
+               (numpy.ndarray) The position of the ray intersection point.
     """
 
     # we'll try itercasting first. premature optimization is the root of all evil
-    cur = np.array([origin[0], origin[1]])
+    cur = np.array([origin[0], origin[1]], np.float64)
     for i in range(10000):
         cur += dir
         if map[int(cur[1]), int(cur[0])]:
